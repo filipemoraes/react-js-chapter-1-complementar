@@ -1,14 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Button } from './Button';
 import { api } from './../services/api';
+import { Genre } from '../interfaces/Genre';
 
 import './../styles/sidebar.scss';
-
-interface GenreResponseProps {
-  id: number;
-  name: 'action' | 'comedy' | 'documentary' | 'drama' | 'horror' | 'family';
-  title: string;
-}
 
 interface Props {
   onSelectedGenre: Function;
@@ -16,16 +11,16 @@ interface Props {
 
 export function SideBar(props: Props) {
   const [selectedGenreId, setSelectedGenreId] = useState(1);
-  const [genres, setGenres] = useState<GenreResponseProps[]>([]);
+  const [genres, setGenres] = useState<Genre[]>([]);
 
   useEffect(() => {
-    api.get<GenreResponseProps[]>('genres').then(response => {
+    api.get<Genre[]>('genres').then(response => {
       setGenres(response.data);
     });
   }, []);
 
   useEffect(() => {
-    api.get<GenreResponseProps>(`genres/${selectedGenreId}`).then(response => {
+    api.get<Genre>(`genres/${selectedGenreId}`).then(response => {
       props.onSelectedGenre(response.data);
     })
   }, [selectedGenreId]);
